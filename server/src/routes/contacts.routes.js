@@ -1,6 +1,7 @@
 import express from "express";
 import { requireAuth } from "../auth/requireAuth.js";
 import Contact from "../models/Contact.js";
+import ManualLink from "../models/ManualLink.js";
 
 const router = express.Router();
 
@@ -77,6 +78,12 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   const contact = await Contact.findOneAndDelete({ _id: req.params.id, ownerUserId: req.user._id });
   if (!contact) return res.status(404).json({ error: "Contact not found" });
+
+  await ManualLink.deleteMany({
+    ownerUserId: req.user._id,
+    $or: [{ contactAId: contact._id }, { contactBId: contact._id }],
+  });
+
   res.status(204).end();
 });
 

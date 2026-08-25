@@ -47,6 +47,9 @@ export default function Navbar() {
         <NavLink to="/contacts" style={navLinkStyle}>
           Contacts
         </NavLink>
+        <NavLink to="/graph" style={navLinkStyle}>
+          Graph
+        </NavLink>
       </div>
 
       <div style={{ flex: 1 }} />

@@ -16,15 +16,40 @@ export default function ContactDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [contact, setContact] = useState(null);
+  const [allContacts, setAllContacts] = useState([]);
+  const [links, setLinks] = useState([]);
+  const [picking, setPicking] = useState(false);
+
+  function loadLinks() {
+    api.get("/api/links").then(({ links }) => setLinks(links.filter((l) => l.contactAId === id || l.contactBId === id)));
+  }
 
   useEffect(() => {
     api.get(`/api/contacts/${id}`).then(({ contact }) => setContact(contact));
+    api.get("/api/contacts").then(({ contacts }) => setAllContacts(contacts));
+    loadLinks();
+    setPicking(false);
   }, [id]);
 
   async function onDelete() {
     if (!window.confirm(`Delete ${contact.name}? This can't be undone.`)) return;
     await api.delete(`/api/contacts/${id}`);
     navigate("/contacts");
+  }
+
+  async function addLink(otherId) {
+    setPicking(false);
+    try {
+      await api.post("/api/links", { contactAId: id, contactBId: otherId });
+      loadLinks();
+    } catch (err) {
+      window.alert(err.message);
+    }
+  }
+
+  async function removeLink(linkId) {
+    await api.delete(`/api/links/${linkId}`);
+    loadLinks();
   }
 
   if (!contact) {
@@ -132,6 +157,57 @@ export default function ContactDetailPage() {
                 <div style={{ fontSize: 14, lineHeight: 1.6, whiteSpace: "pre-wrap" }}>{contact.notes}</div>
               </div>
             )}
+
+            <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", padding: "22px 24px" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
+                <span style={{ fontSize: 14, fontWeight: 600 }}>Also knows</span>
+                <button
+                  type="button"
+                  onClick={() => setPicking((p) => !p)}
+                  style={{ border: "none", background: "none", fontSize: 12, fontWeight: 600, color: "var(--accent)", cursor: "pointer" }}
+                >
+                  + Link a contact
+                </button>
+              </div>
+
+              {picking && (
+                <div style={{ marginBottom: 14, display: "flex", flexDirection: "column", gap: 6, maxHeight: 180, overflowY: "auto" }}>
+                  {allContacts
+                    .filter((c) => c._id !== id && !links.some((l) => l.contactAId === c._id || l.contactBId === c._id))
+                    .map((c) => (
+                      <button
+                        key={c._id}
+                        type="button"
+                        onClick={() => addLink(c._id)}
+                        style={{ textAlign: "left", padding: "8px 12px", borderRadius: "var(--radius-sm)", border: "none", background: "var(--surface-2)", fontSize: 13, color: "var(--text)", cursor: "pointer" }}
+                      >
+                        {c.name}
+                      </button>
+                    ))}
+                </div>
+              )}
+
+              {links.length === 0 && !picking && <div style={{ fontSize: 13, color: "var(--text-tertiary)" }}>No manual connections yet.</div>}
+
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {links.map((link) => {
+                  const otherId = link.contactAId === id ? link.contactBId : link.contactAId;
+                  const other = allContacts.find((c) => c._id === otherId);
+                  return (
+                    <div key={link._id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 14px", background: "var(--surface-2)", borderRadius: "var(--radius-sm)" }}>
+                      <span style={{ fontSize: 13, color: "var(--text)" }}>{other?.name || "Unknown contact"}</span>
+                      <button
+                        type="button"
+                        onClick={() => removeLink(link._id)}
+                        style={{ marginLeft: "auto", border: "none", background: "none", fontSize: 12, color: "var(--text-tertiary)", cursor: "pointer" }}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -6,6 +6,8 @@ import { PORT, CORS_ORIGIN } from "./config.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import authRouter from "./routes/auth.routes.js";
 import contactsRouter from "./routes/contacts.routes.js";
+import linksRouter from "./routes/links.routes.js";
+import graphRouter from "./routes/graph.routes.js";
 
 const app = express();
 
@@ -15,6 +17,8 @@ app.get("/api/health", (req, res) => res.json({ ok: true }));
 
 app.use("/api/auth", requireDB, authRouter);
 app.use("/api/contacts", requireDB, contactsRouter);
+app.use("/api/links", requireDB, linksRouter);
+app.use("/api/graph", requireDB, graphRouter);
 
 app.use("/api", errorHandler);
 

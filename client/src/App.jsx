@@ -8,6 +8,7 @@ import OnboardingPage from "./pages/OnboardingPage";
 import ContactsListPage from "./pages/ContactsListPage";
 import ContactFormPage from "./pages/ContactFormPage";
 import ContactDetailPage from "./pages/ContactDetailPage";
+import GraphPage from "./pages/GraphPage";
 
 function Root() {
   const { status, user } = useAuth();
@@ -59,6 +60,14 @@ function App() {
         element={
           <RequireAuth>
             <ContactFormPage />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/graph"
+        element={
+          <RequireAuth>
+            <GraphPage />
           </RequireAuth>
         }
       />
