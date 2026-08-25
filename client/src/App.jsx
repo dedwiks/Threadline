@@ -1,32 +1,68 @@
-import { useEffect, useState } from "react";
-import { api } from "./api";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { useAuth } from "./auth/AuthContext";
+import RequireAuth from "./auth/RequireAuth";
+import LoadingWakeup from "./components/LoadingWakeup";
+import LoginPage from "./pages/LoginPage";
+import AuthCallbackPage from "./pages/AuthCallbackPage";
+import OnboardingPage from "./pages/OnboardingPage";
+import ContactsListPage from "./pages/ContactsListPage";
+import ContactFormPage from "./pages/ContactFormPage";
+import ContactDetailPage from "./pages/ContactDetailPage";
+
+function Root() {
+  const { status, user } = useAuth();
+  if (status === "loading") return <LoadingWakeup />;
+  if (status === "anon") return <Navigate to="/login" replace />;
+  return <Navigate to={user.onboarded ? "/contacts" : "/onboarding"} replace />;
+}
 
 function App() {
-  const [status, setStatus] = useState("checking");
-
-  useEffect(() => {
-    api
-      .get("/api/health")
-      .then(() => setStatus("connected"))
-      .catch(() => setStatus("unreachable"));
-  }, []);
-
   return (
-    <div
-      style={{
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: "var(--space-3)",
-      }}
-    >
-      <div style={{ fontSize: "20px", fontWeight: 650, letterSpacing: "-0.02em" }}>Threadline</div>
-      <div style={{ fontSize: "14px", color: "var(--text-secondary)" }}>
-        Server: <strong style={{ color: "var(--text)" }}>{status}</strong>
-      </div>
-    </div>
+    <Routes>
+      <Route path="/" element={<Root />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/auth/callback" element={<AuthCallbackPage />} />
+      <Route
+        path="/onboarding"
+        element={
+          <RequireAuth>
+            <OnboardingPage />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/contacts"
+        element={
+          <RequireAuth>
+            <ContactsListPage />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/contacts/new"
+        element={
+          <RequireAuth>
+            <ContactFormPage />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/contacts/:id"
+        element={
+          <RequireAuth>
+            <ContactDetailPage />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/contacts/:id/edit"
+        element={
+          <RequireAuth>
+            <ContactFormPage />
+          </RequireAuth>
+        }
+      />
+    </Routes>
   );
 }
 
