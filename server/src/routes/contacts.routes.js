@@ -2,6 +2,7 @@ import express from "express";
 import { requireAuth } from "../auth/requireAuth.js";
 import Contact from "../models/Contact.js";
 import ManualLink from "../models/ManualLink.js";
+import { onContactUpsert } from "../services/matching.service.js";
 
 const router = express.Router();
 
@@ -60,6 +61,7 @@ router.post("/", async (req, res) => {
   const contact = new Contact({ ownerUserId: req.user._id });
   applyFields(contact, req.body);
   await contact.save();
+  await onContactUpsert(contact);
 
   res.status(201).json({ contact });
 });
@@ -71,6 +73,7 @@ router.put("/:id", async (req, res) => {
   applyFields(contact, req.body);
   contact.updatedAt = new Date();
   await contact.save();
+  await onContactUpsert(contact);
 
   res.json({ contact });
 });

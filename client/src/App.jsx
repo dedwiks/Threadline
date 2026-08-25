@@ -9,6 +9,7 @@ import ContactsListPage from "./pages/ContactsListPage";
 import ContactFormPage from "./pages/ContactFormPage";
 import ContactDetailPage from "./pages/ContactDetailPage";
 import GraphPage from "./pages/GraphPage";
+import SettingsPage from "./pages/SettingsPage";
 
 function Root() {
   const { status, user } = useAuth();
@@ -68,6 +69,14 @@ function App() {
         element={
           <RequireAuth>
             <GraphPage />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <RequireAuth>
+            <SettingsPage />
           </RequireAuth>
         }
       />

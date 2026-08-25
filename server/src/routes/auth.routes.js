@@ -5,6 +5,7 @@ import { requireAuth } from "../auth/requireAuth.js";
 import { generateUniqueUsername, isUsernameAvailable } from "../auth/username.js";
 import { CLIENT_URL } from "../config.js";
 import User from "../models/User.js";
+import { onUserSignup } from "../services/matching.service.js";
 
 const router = express.Router();
 
@@ -31,6 +32,7 @@ router.get("/google/callback", async (req, res) => {
         googleId: profile.googleId,
         avatarUrl: profile.avatarUrl,
       });
+      await onUserSignup(user);
     }
 
     const token = signToken(user._id.toString());
@@ -56,6 +58,8 @@ router.get("/username-available", requireAuth, async (req, res) => {
 
 router.patch("/me", requireAuth, async (req, res) => {
   const { username, discoverable, socialLinks, onboarded } = req.body;
+  const previousLinkedin = req.user.socialLinks?.linkedin;
+  const previousDiscoverable = req.user.discoverable;
 
   if (username !== undefined) {
     const normalized = username.toLowerCase().trim();
@@ -78,6 +82,15 @@ router.patch("/me", requireAuth, async (req, res) => {
   }
 
   await req.user.save();
+
+  // Re-scan for unmatched contacts referencing this person if they just became
+  // discoverable, or added a LinkedIn that wasn't there at signup time.
+  const linkedinAdded = req.user.socialLinks.linkedin && req.user.socialLinks.linkedin !== previousLinkedin;
+  const becameDiscoverable = req.user.discoverable && !previousDiscoverable;
+  if (linkedinAdded || becameDiscoverable) {
+    await onUserSignup(req.user);
+  }
+
   res.json({ user: req.user });
 });
 

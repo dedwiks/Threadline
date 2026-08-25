@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
+import NotificationBell from "./NotificationBell";
 
 const navLinkStyle = ({ isActive }) => ({
   color: isActive ? "var(--text)" : "var(--text-secondary)",
@@ -50,11 +51,15 @@ export default function Navbar() {
         <NavLink to="/graph" style={navLinkStyle}>
           Graph
         </NavLink>
+        <NavLink to="/settings" style={navLinkStyle}>
+          Settings
+        </NavLink>
       </div>
 
       <div style={{ flex: 1 }} />
 
       <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+        <NotificationBell />
         <div
           title={user?.name}
           style={{

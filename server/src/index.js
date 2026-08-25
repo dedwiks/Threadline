@@ -8,6 +8,7 @@ import authRouter from "./routes/auth.routes.js";
 import contactsRouter from "./routes/contacts.routes.js";
 import linksRouter from "./routes/links.routes.js";
 import graphRouter from "./routes/graph.routes.js";
+import notificationsRouter from "./routes/notifications.routes.js";
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use("/api/auth", requireDB, authRouter);
 app.use("/api/contacts", requireDB, contactsRouter);
 app.use("/api/links", requireDB, linksRouter);
 app.use("/api/graph", requireDB, graphRouter);
+app.use("/api/notifications", requireDB, notificationsRouter);
 
 app.use("/api", errorHandler);
 
