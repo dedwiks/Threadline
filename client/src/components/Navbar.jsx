@@ -51,6 +51,9 @@ export default function Navbar() {
         <NavLink to="/graph" style={navLinkStyle}>
           Graph
         </NavLink>
+        <NavLink to="/map" style={navLinkStyle}>
+          Map
+        </NavLink>
         <NavLink to="/settings" style={navLinkStyle}>
           Settings
         </NavLink>

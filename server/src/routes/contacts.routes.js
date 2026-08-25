@@ -3,6 +3,7 @@ import { requireAuth } from "../auth/requireAuth.js";
 import Contact from "../models/Contact.js";
 import ManualLink from "../models/ManualLink.js";
 import { onContactUpsert } from "../services/matching.service.js";
+import { geocode } from "../services/geocode.service.js";
 
 const router = express.Router();
 
@@ -33,6 +34,13 @@ function applyFields(contact, body) {
   }
 }
 
+async function applyGeocode(contact) {
+  if (!contact.location?.text) return;
+  const geo = await geocode(contact.location.text);
+  contact.location.lat = geo?.lat ?? null;
+  contact.location.lng = geo?.lng ?? null;
+}
+
 router.get("/", async (req, res) => {
   const { q, tag } = req.query;
   const filter = { ownerUserId: req.user._id };
@@ -60,6 +68,7 @@ router.post("/", async (req, res) => {
 
   const contact = new Contact({ ownerUserId: req.user._id });
   applyFields(contact, req.body);
+  await applyGeocode(contact);
   await contact.save();
   await onContactUpsert(contact);
 
@@ -70,7 +79,11 @@ router.put("/:id", async (req, res) => {
   const contact = await Contact.findOne({ _id: req.params.id, ownerUserId: req.user._id });
   if (!contact) return res.status(404).json({ error: "Contact not found" });
 
+  const previousLocationText = contact.location?.text;
   applyFields(contact, req.body);
+  if (contact.location?.text !== previousLocationText) {
+    await applyGeocode(contact);
+  }
   contact.updatedAt = new Date();
   await contact.save();
   await onContactUpsert(contact);

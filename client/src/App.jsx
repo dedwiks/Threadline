@@ -9,6 +9,7 @@ import ContactsListPage from "./pages/ContactsListPage";
 import ContactFormPage from "./pages/ContactFormPage";
 import ContactDetailPage from "./pages/ContactDetailPage";
 import GraphPage from "./pages/GraphPage";
+import MapPage from "./pages/MapPage";
 import SettingsPage from "./pages/SettingsPage";
 
 function Root() {
@@ -69,6 +70,14 @@ function App() {
         element={
           <RequireAuth>
             <GraphPage />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/map"
+        element={
+          <RequireAuth>
+            <MapPage />
           </RequireAuth>
         }
       />
