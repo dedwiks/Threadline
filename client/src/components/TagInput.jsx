@@ -3,8 +3,7 @@ import { useState } from "react";
 export default function TagInput({ tags, onChange }) {
   const [draft, setDraft] = useState("");
 
-  function addTag(e) {
-    e.preventDefault();
+  function addTag() {
     const value = draft.trim();
     if (!value || tags.includes(value)) {
       setDraft("");
@@ -12,6 +11,12 @@ export default function TagInput({ tags, onChange }) {
     }
     onChange([...tags, value]);
     setDraft("");
+  }
+
+  function onKeyDown(e) {
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+    addTag();
   }
 
   function removeTag(tag) {
@@ -46,22 +51,21 @@ export default function TagInput({ tags, onChange }) {
           </button>
         </span>
       ))}
-      <form onSubmit={addTag} style={{ display: "inline-flex" }}>
-        <input
-          value={draft}
-          onChange={(e) => setDraft(e.target.value)}
-          placeholder="Add a tag…"
-          style={{
-            border: "none",
-            outline: "none",
-            background: "transparent",
-            fontSize: 13,
-            color: "var(--text)",
-            fontFamily: "var(--font)",
-            minWidth: 100,
-          }}
-        />
-      </form>
+      <input
+        value={draft}
+        onChange={(e) => setDraft(e.target.value)}
+        onKeyDown={onKeyDown}
+        placeholder="Add a tag…"
+        style={{
+          border: "none",
+          outline: "none",
+          background: "transparent",
+          fontSize: 13,
+          color: "var(--text)",
+          fontFamily: "var(--font)",
+          minWidth: 100,
+        }}
+      />
     </div>
   );
 }

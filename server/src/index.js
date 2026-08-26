@@ -10,6 +10,7 @@ import linksRouter from "./routes/links.routes.js";
 import graphRouter from "./routes/graph.routes.js";
 import notificationsRouter from "./routes/notifications.routes.js";
 import mapRouter from "./routes/map.routes.js";
+import aiRouter from "./routes/ai.routes.js";
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use("/api/links", requireDB, linksRouter);
 app.use("/api/graph", requireDB, graphRouter);
 app.use("/api/notifications", requireDB, notificationsRouter);
 app.use("/api", requireDB, mapRouter);
+app.use("/api/ai", aiRouter);
 
 app.use("/api", errorHandler);
 

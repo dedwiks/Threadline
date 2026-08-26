@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../api";
 import Navbar from "../components/Navbar";
 import TagInput from "../components/TagInput";
+import AiSuggestionPanel from "../components/AiSuggestionPanel";
 
 const EMPTY = {
   name: "",
@@ -112,6 +113,8 @@ export default function ContactFormPage() {
             </div>
             <Field label="Location" placeholder="City, Country" value={form.location.text} onChange={(e) => set("location", { text: e.target.value })} />
           </div>
+
+          <AiSuggestionPanel name={form.name} company={form.company} profession={form.profession} onInsert={(field, value) => set(field, value)} />
 
           <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", padding: "24px 28px", display: "flex", flexDirection: "column", gap: 16 }}>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0,1fr))", gap: 16 }}>
