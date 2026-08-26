@@ -28,6 +28,7 @@ export default function ContactCard({ contact }) {
   return (
     <Link
       to={`/contacts/${contact._id}`}
+      className="tl-row"
       style={{
         display: "flex",
         alignItems: "center",

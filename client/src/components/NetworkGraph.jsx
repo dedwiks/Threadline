@@ -15,7 +15,10 @@ export default function NetworkGraph({ graphData, onNodeClick }) {
     return () => observer.disconnect();
   }, []);
 
-  const accent = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#2f6fed";
+  const rootStyle = getComputedStyle(document.documentElement);
+  const accent = rootStyle.getPropertyValue("--accent").trim() || "#2f6fed";
+  const textColor = rootStyle.getPropertyValue("--text").trim() || "#1c1c1e";
+  const labelBg = rootStyle.getPropertyValue("--panel-bg-opaque").trim() || "rgba(255,255,255,0.85)";
 
   const data = {
     nodes: graphData.nodes,
@@ -47,12 +50,32 @@ export default function NetworkGraph({ graphData, onNodeClick }) {
             ctx.stroke();
           }
 
+          const label = isSelf ? "You" : node.label;
           const fontSize = 11 / globalScale;
           ctx.font = `${node.matched || isSelf ? 600 : 500} ${fontSize}px -apple-system, sans-serif`;
           ctx.textAlign = "center";
           ctx.textBaseline = "top";
-          ctx.fillStyle = "#1c1c1e";
-          ctx.fillText(isSelf ? "You" : node.label, node.x, node.y + radius + 3);
+
+          const labelY = node.y + radius + 3;
+          const textWidth = ctx.measureText(label).width;
+          const padX = 6 / globalScale;
+          const padY = 3 / globalScale;
+          const rectX = node.x - textWidth / 2 - padX;
+          const rectY = labelY - padY;
+          const rectW = textWidth + padX * 2;
+          const rectH = fontSize + padY * 2;
+
+          ctx.fillStyle = labelBg;
+          ctx.beginPath();
+          if (ctx.roundRect) {
+            ctx.roundRect(rectX, rectY, rectW, rectH, 3 / globalScale);
+          } else {
+            ctx.rect(rectX, rectY, rectW, rectH);
+          }
+          ctx.fill();
+
+          ctx.fillStyle = textColor;
+          ctx.fillText(label, node.x, labelY);
         }}
         nodePointerAreaPaint={(node, color, ctx) => {
           ctx.fillStyle = color;

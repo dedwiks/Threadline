@@ -8,6 +8,7 @@ const navLinkStyle = ({ isActive }) => ({
   paddingBottom: 20,
   fontSize: 14,
   fontWeight: 500,
+  transition: "var(--transition-fast)",
 });
 
 export default function Navbar() {
@@ -28,7 +29,7 @@ export default function Navbar() {
         display: "flex",
         alignItems: "center",
         padding: "0 32px",
-        background: "rgba(255,255,255,0.72)",
+        background: "var(--panel-bg)",
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
         borderBottom: "1px solid var(--border)",
@@ -45,16 +46,16 @@ export default function Navbar() {
       </div>
 
       <div style={{ display: "flex", alignItems: "center", gap: 28 }}>
-        <NavLink to="/contacts" style={navLinkStyle}>
+        <NavLink to="/contacts" className="tl-nav-link" style={navLinkStyle}>
           Contacts
         </NavLink>
-        <NavLink to="/graph" style={navLinkStyle}>
+        <NavLink to="/graph" className="tl-nav-link" style={navLinkStyle}>
           Graph
         </NavLink>
-        <NavLink to="/map" style={navLinkStyle}>
+        <NavLink to="/map" className="tl-nav-link" style={navLinkStyle}>
           Map
         </NavLink>
-        <NavLink to="/settings" style={navLinkStyle}>
+        <NavLink to="/settings" className="tl-nav-link" style={navLinkStyle}>
           Settings
         </NavLink>
       </div>
@@ -84,12 +85,15 @@ export default function Navbar() {
         <button
           type="button"
           onClick={logout}
+          className="tl-btn-ghost"
           style={{
             border: "none",
             background: "transparent",
             color: "var(--text-tertiary)",
             fontSize: 13,
-            cursor: "pointer",
+            height: 30,
+            padding: "0 10px",
+            borderRadius: "var(--radius-sm)",
           }}
         >
           Log out

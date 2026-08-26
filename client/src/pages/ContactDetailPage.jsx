@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { api } from "../api";
 import Navbar from "../components/Navbar";
+import LoadingWakeup from "../components/LoadingWakeup";
 
 function InfoRow({ icon, children }) {
   return (
@@ -54,8 +55,11 @@ export default function ContactDetailPage() {
 
   if (!contact) {
     return (
-      <div>
+      <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
         <Navbar />
+        <div style={{ flex: 1 }}>
+          <LoadingWakeup />
+        </div>
       </div>
     );
   }
@@ -124,6 +128,7 @@ export default function ContactDetailPage() {
             <div style={{ display: "flex", gap: 10, marginTop: 24 }}>
               <Link
                 to={`/contacts/${id}/edit`}
+                className="tl-btn-secondary"
                 style={{ flex: 1, textAlign: "center", height: 38, lineHeight: "38px", borderRadius: "var(--radius-sm)", border: "1px solid var(--border)", fontSize: 13, fontWeight: 600, color: "var(--text)" }}
               >
                 Edit
@@ -131,7 +136,8 @@ export default function ContactDetailPage() {
               <button
                 type="button"
                 onClick={onDelete}
-                style={{ flex: 1, height: 38, borderRadius: "var(--radius-sm)", border: "1px solid var(--border)", background: "none", fontSize: 13, fontWeight: 600, color: "var(--danger)", cursor: "pointer" }}
+                className="tl-btn-ghost"
+                style={{ flex: 1, height: 38, borderRadius: "var(--radius-sm)", border: "1px solid var(--border)", background: "none", fontSize: 13, fontWeight: 600, color: "var(--danger)" }}
               >
                 Delete
               </button>
@@ -164,7 +170,8 @@ export default function ContactDetailPage() {
                 <button
                   type="button"
                   onClick={() => setPicking((p) => !p)}
-                  style={{ border: "none", background: "none", fontSize: 12, fontWeight: 600, color: "var(--accent)", cursor: "pointer" }}
+                  className="tl-text-link"
+                  style={{ border: "none", background: "none", fontSize: 12, fontWeight: 600, color: "var(--accent)" }}
                 >
                   + Link a contact
                 </button>
@@ -179,7 +186,8 @@ export default function ContactDetailPage() {
                         key={c._id}
                         type="button"
                         onClick={() => addLink(c._id)}
-                        style={{ textAlign: "left", padding: "8px 12px", borderRadius: "var(--radius-sm)", border: "none", background: "var(--surface-2)", fontSize: 13, color: "var(--text)", cursor: "pointer" }}
+                        className="tl-btn-secondary"
+                        style={{ textAlign: "left", padding: "8px 12px", borderRadius: "var(--radius-sm)", border: "none", background: "var(--surface-2)", fontSize: 13, color: "var(--text)" }}
                       >
                         {c.name}
                       </button>
@@ -199,7 +207,8 @@ export default function ContactDetailPage() {
                       <button
                         type="button"
                         onClick={() => removeLink(link._id)}
-                        style={{ marginLeft: "auto", border: "none", background: "none", fontSize: 12, color: "var(--text-tertiary)", cursor: "pointer" }}
+                        className="tl-text-link"
+                        style={{ marginLeft: "auto", border: "none", background: "none", fontSize: 12, color: "var(--text-tertiary)" }}
                       >
                         Remove
                       </button>

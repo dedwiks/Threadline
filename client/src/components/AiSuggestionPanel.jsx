@@ -36,7 +36,8 @@ export default function AiSuggestionPanel({ name, company, profession, onInsert 
           type="button"
           onClick={requestSuggestions}
           disabled={!name.trim() || loading}
-          style={{ border: "none", background: "none", fontSize: 12, fontWeight: 600, color: "var(--accent)", cursor: name.trim() ? "pointer" : "default", opacity: name.trim() ? 1 : 0.5 }}
+          className="tl-text-link"
+          style={{ border: "none", background: "none", fontSize: 12, fontWeight: 600, color: "var(--accent)", opacity: name.trim() ? 1 : 0.5 }}
         >
           {loading ? "Thinking…" : "Get suggestions"}
         </button>
@@ -61,7 +62,8 @@ export default function AiSuggestionPanel({ name, company, profession, onInsert 
               <button
                 type="button"
                 onClick={() => onInsert(field, suggestion.value)}
-                style={{ border: "none", background: "none", fontSize: 12, fontWeight: 600, color: "var(--accent)", cursor: "pointer" }}
+                className="tl-text-link"
+                style={{ border: "none", background: "none", fontSize: 12, fontWeight: 600, color: "var(--accent)" }}
               >
                 Insert
               </button>

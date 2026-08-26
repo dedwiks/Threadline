@@ -95,7 +95,8 @@ export default function SettingsPage() {
               <button
                 type="submit"
                 disabled={saving}
-                style={{ height: 38, padding: "0 18px", borderRadius: "var(--radius-md)", border: "none", background: "var(--accent)", color: "var(--accent-contrast)", fontSize: 13, fontWeight: 600, cursor: "pointer", opacity: saving ? 0.6 : 1 }}
+                className="tl-btn-primary"
+                style={{ height: 38, padding: "0 18px", borderRadius: "var(--radius-md)", border: "none", background: "var(--accent)", color: "var(--accent-contrast)", fontSize: 13, fontWeight: 600, opacity: saving ? 0.6 : 1 }}
               >
                 Save
               </button>
@@ -122,7 +123,7 @@ export default function SettingsPage() {
                 position: "relative",
                 flexShrink: 0,
                 marginTop: 4,
-                cursor: "pointer",
+                transition: "var(--transition-fast)",
               }}
             >
               <div style={{ width: 21, height: 21, borderRadius: "50%", background: "#fff", position: "absolute", top: 3, left: user?.discoverable ? 22 : 3, transition: "var(--transition-fast)", boxShadow: "0 1px 3px rgba(0,0,0,0.25)" }} />

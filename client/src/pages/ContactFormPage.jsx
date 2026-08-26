@@ -4,6 +4,7 @@ import { api } from "../api";
 import Navbar from "../components/Navbar";
 import TagInput from "../components/TagInput";
 import AiSuggestionPanel from "../components/AiSuggestionPanel";
+import LoadingWakeup from "../components/LoadingWakeup";
 
 const EMPTY = {
   name: "",
@@ -92,8 +93,11 @@ export default function ContactFormPage() {
 
   if (loading) {
     return (
-      <div>
+      <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
         <Navbar />
+        <div style={{ flex: 1 }}>
+          <LoadingWakeup />
+        </div>
       </div>
     );
   }
@@ -156,14 +160,16 @@ export default function ContactFormPage() {
             <button
               type="button"
               onClick={() => navigate(-1)}
-              style={{ flex: 1, height: 44, borderRadius: "var(--radius-md)", border: "1px solid var(--border)", background: "var(--surface-2)", color: "var(--text-secondary)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}
+              className="tl-btn-secondary"
+              style={{ flex: 1, height: 44, borderRadius: "var(--radius-md)", border: "1px solid var(--border)", background: "var(--surface-2)", color: "var(--text-secondary)", fontSize: 14, fontWeight: 600 }}
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={saving}
-              style={{ flex: 1, height: 44, borderRadius: "var(--radius-md)", border: "none", background: "var(--accent)", color: "var(--accent-contrast)", fontSize: 14, fontWeight: 600, cursor: "pointer", opacity: saving ? 0.6 : 1 }}
+              className="tl-btn-primary"
+              style={{ flex: 1, height: 44, borderRadius: "var(--radius-md)", border: "none", background: "var(--accent)", color: "var(--accent-contrast)", fontSize: 14, fontWeight: 600, opacity: saving ? 0.6 : 1 }}
             >
               {isEdit ? "Save changes" : "Add contact"}
             </button>

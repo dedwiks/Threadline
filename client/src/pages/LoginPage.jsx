@@ -10,7 +10,7 @@ export default function LoginPage() {
         alignItems: "center",
         justifyContent: "center",
         background:
-          "radial-gradient(ellipse 900px 500px at 50% 8%, rgba(255,255,255,0.6), transparent 65%), var(--bg)",
+          "radial-gradient(ellipse 900px 500px at 50% 8%, var(--hero-glow), transparent 65%), var(--bg)",
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -68,6 +68,7 @@ export default function LoginPage() {
 
         <a
           href={`${API_URL}/api/auth/google`}
+          className="tl-btn-secondary"
           style={{
             display: "flex",
             alignItems: "center",

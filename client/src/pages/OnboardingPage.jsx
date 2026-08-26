@@ -130,6 +130,7 @@ export default function OnboardingPage() {
             type="button"
             onClick={skip}
             disabled={saving}
+            className="tl-btn-secondary"
             style={{
               flex: 1,
               height: 44,
@@ -139,7 +140,6 @@ export default function OnboardingPage() {
               color: "var(--text-secondary)",
               fontSize: 14,
               fontWeight: 600,
-              cursor: "pointer",
             }}
           >
             Skip
@@ -147,6 +147,7 @@ export default function OnboardingPage() {
           <button
             type="submit"
             disabled={saving || availability === "taken" || availability === "checking"}
+            className="tl-btn-primary"
             style={{
               flex: 1,
               height: 44,
@@ -156,7 +157,6 @@ export default function OnboardingPage() {
               color: "var(--accent-contrast)",
               fontSize: 14,
               fontWeight: 600,
-              cursor: "pointer",
               opacity: saving || availability === "taken" ? 0.6 : 1,
             }}
           >

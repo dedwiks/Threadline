@@ -3,6 +3,7 @@ function Chip({ active, children, onClick }) {
     <button
       type="button"
       onClick={onClick}
+      className="tl-chip"
       style={{
         fontSize: 12,
         fontWeight: 500,
@@ -11,7 +12,6 @@ function Chip({ active, children, onClick }) {
         border: `1px solid ${active ? "var(--accent)" : "var(--border)"}`,
         color: active ? "var(--accent-contrast)" : "var(--text-secondary)",
         background: active ? "var(--accent)" : "var(--surface)",
-        cursor: "pointer",
       }}
     >
       {children}
@@ -30,7 +30,7 @@ export default function FilterPanel({ professionOptions, tagOptions, value, onCh
     <div
       style={{
         width: 280,
-        background: "rgba(255,255,255,0.85)",
+        background: "var(--panel-bg-opaque)",
         backdropFilter: "blur(16px)",
         WebkitBackdropFilter: "blur(16px)",
         border: "1px solid var(--border)",
@@ -48,7 +48,8 @@ export default function FilterPanel({ professionOptions, tagOptions, value, onCh
           <button
             type="button"
             onClick={() => onChange({ profession: [], company: "", tag: [], location: "" })}
-            style={{ border: "none", background: "none", fontSize: 12, fontWeight: 600, color: "var(--accent)", cursor: "pointer" }}
+            className="tl-text-link"
+            style={{ border: "none", background: "none", fontSize: 12, fontWeight: 600, color: "var(--accent)" }}
           >
             Clear
           </button>

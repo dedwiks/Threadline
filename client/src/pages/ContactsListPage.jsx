@@ -30,6 +30,7 @@ export default function ContactsListPage() {
             </div>
             <Link
               to="/contacts/new"
+              className="tl-btn-primary"
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -52,6 +53,7 @@ export default function ContactsListPage() {
 
           <div style={{ marginBottom: 24 }}>
             <div
+              className="tl-search"
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -75,6 +77,10 @@ export default function ContactsListPage() {
               />
             </div>
           </div>
+
+          {contacts === null && (
+            <div style={{ textAlign: "center", padding: "60px 24px", color: "var(--text-tertiary)", fontSize: 14 }}>Loading…</div>
+          )}
 
           {contacts?.length === 0 && (
             <div

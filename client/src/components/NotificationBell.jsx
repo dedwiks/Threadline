@@ -47,6 +47,7 @@ export default function NotificationBell() {
       <button
         type="button"
         onClick={toggleOpen}
+        className="tl-btn-ghost"
         style={{
           position: "relative",
           width: 36,
