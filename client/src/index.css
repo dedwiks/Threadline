@@ -126,3 +126,11 @@ textarea:focus {
     filter: brightness(1.15);
   }
 }
+
+/* Fakes a dark basemap from plain OpenStreetMap tiles (no free no-key dark
+   tile source exists) — inverting + hue-rotating turns light OSM tiles into
+   a passable dark map. Scoped to the tile pane only; pins/popups/controls
+   are separate DOM elements and stay unaffected. */
+.tl-map-tiles-dark {
+  filter: invert(1) hue-rotate(180deg) brightness(0.95) contrast(0.9);
+}

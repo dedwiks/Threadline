@@ -5,12 +5,15 @@ import "leaflet/dist/leaflet.css";
 
 const isDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-const TILE_URL = isDark
-  ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-  : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
-
-const ATTRIBUTION =
-  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
+// Plain OpenStreetMap raster tiles — genuinely free, no API key. (CARTO's
+// basemap CDN, used previously, started requiring a key and showed an
+// "API KEY REQUIRED" watermark in production even though it worked
+// unauthenticated in local testing.) There's no free no-key dark tile
+// set, so dark mode reuses these same light tiles with a CSS filter
+// (invert + hue-rotate) applied to the tile layer only — pins and popups
+// are separate DOM elements and aren't affected by it.
+const TILE_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+const ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
 function pinIcon(color) {
   const svg = `
@@ -39,7 +42,7 @@ export default function ContactsMap({ contacts, onSelect }) {
 
   return (
     <MapContainer center={center} zoom={zoom} style={{ width: "100%", height: "100%" }} scrollWheelZoom>
-      <TileLayer url={TILE_URL} attribution={ATTRIBUTION} />
+      <TileLayer url={TILE_URL} attribution={ATTRIBUTION} className={isDark ? "tl-map-tiles-dark" : ""} />
       {contacts.map((contact) => (
         <Marker
           key={contact._id}
