@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { api } from "../api";
+
+const CONNECTION_NOTIFICATION_TYPES = ["connection_request", "introduction_request", "connection_accepted", "connection_declined"];
 
 function timeAgo(dateStr) {
   const seconds = Math.max(0, Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000));
@@ -16,6 +19,7 @@ export default function NotificationBell() {
   const [notifications, setNotifications] = useState([]);
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
+  const navigate = useNavigate();
 
   function load() {
     api.get("/api/notifications").then(({ notifications }) => setNotifications(notifications));
@@ -89,13 +93,56 @@ export default function NotificationBell() {
           {notifications.length === 0 ? (
             <div style={{ padding: 20, fontSize: 13, color: "var(--text-tertiary)", textAlign: "center" }}>No notifications yet</div>
           ) : (
-            notifications.map((n) => (
-              <div key={n._id} style={{ display: "flex", flexDirection: "column", gap: 4, padding: "12px 16px", borderBottom: "1px solid var(--border)" }}>
-                <div style={{ fontSize: 13, color: "var(--text)" }}>{n.message}</div>
-                <div style={{ fontSize: 11, color: "var(--text-tertiary)" }}>{timeAgo(n.createdAt)}</div>
-              </div>
-            ))
+            notifications.map((n) => {
+              const isConnection = CONNECTION_NOTIFICATION_TYPES.includes(n.type);
+              const Wrapper = isConnection ? "button" : "div";
+              return (
+                <Wrapper
+                  key={n._id}
+                  type={isConnection ? "button" : undefined}
+                  onClick={
+                    isConnection
+                      ? () => {
+                          setOpen(false);
+                          navigate("/connections");
+                        }
+                      : undefined
+                  }
+                  className={isConnection ? "tl-row" : undefined}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 4,
+                    padding: "12px 16px",
+                    borderBottom: "1px solid var(--border)",
+                    width: "100%",
+                    textAlign: "left",
+                    background: "none",
+                    border: "none",
+                    borderBottomWidth: 1,
+                    borderBottomStyle: "solid",
+                    borderBottomColor: "var(--border)",
+                    cursor: isConnection ? "pointer" : "default",
+                  }}
+                >
+                  <div style={{ fontSize: 13, color: "var(--text)" }}>{n.message}</div>
+                  <div style={{ fontSize: 11, color: "var(--text-tertiary)" }}>{timeAgo(n.createdAt)}</div>
+                </Wrapper>
+              );
+            })
           )}
+
+          <button
+            type="button"
+            onClick={() => {
+              setOpen(false);
+              navigate("/connections");
+            }}
+            className="tl-text-link"
+            style={{ display: "block", width: "100%", textAlign: "center", padding: "12px 16px", border: "none", background: "none", fontSize: 12, fontWeight: 600, color: "var(--accent)" }}
+          >
+            View all requests
+          </button>
         </div>
       )}
     </div>

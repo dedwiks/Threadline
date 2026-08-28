@@ -6,6 +6,7 @@ const notificationSchema = new mongoose.Schema({
   message: { type: String, required: true },
   relatedUserId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   relatedContactId: { type: mongoose.Schema.Types.ObjectId, ref: "Contact" },
+  relatedConnectionId: { type: mongoose.Schema.Types.ObjectId, ref: "Connection" },
   read: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
 });

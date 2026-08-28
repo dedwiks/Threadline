@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { api } from "../api";
 import Navbar from "../components/Navbar";
 import LoadingWakeup from "../components/LoadingWakeup";
+import ConnectionPanel from "../components/ConnectionPanel";
 
 function InfoRow({ icon, children }) {
   return (
@@ -145,6 +146,8 @@ export default function ContactDetailPage() {
           </div>
 
           <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 20 }}>
+            {contact.matchedUserId && <ConnectionPanel matchedUserId={contact.matchedUserId} fallbackName={contact.name} />}
+
             {(contact.howWeMet || contact.metDate) && (
               <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", padding: "22px 24px" }}>
                 <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 10 }}>How we met</div>

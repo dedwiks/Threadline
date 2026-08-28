@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import FilterPanel from "../components/FilterPanel";
 import NetworkGraph from "../components/NetworkGraph";
 import LoadingWakeup from "../components/LoadingWakeup";
+import IntroduceModal from "../components/IntroduceModal";
 
 const EMPTY_FILTERS = { profession: [], company: "", tag: [], location: "" };
 
@@ -23,6 +24,7 @@ export default function GraphPage() {
   const [allContacts, setAllContacts] = useState(null);
   const [graphData, setGraphData] = useState(null);
   const [filters, setFilters] = useState(EMPTY_FILTERS);
+  const [introducing, setIntroducing] = useState(false);
 
   useEffect(() => {
     api.get("/api/contacts").then(({ contacts }) => setAllContacts(contacts));
@@ -38,6 +40,7 @@ export default function GraphPage() {
     [allContacts],
   );
   const tagOptions = useMemo(() => [...new Set((allContacts || []).flatMap((c) => c.tags || []))], [allContacts]);
+  const matchedContacts = useMemo(() => (allContacts || []).filter((c) => c.matchedUserId), [allContacts]);
 
   const loading = allContacts === null || graphData === null;
   const hasAnyContacts = (allContacts?.length || 0) > 0;
@@ -73,6 +76,40 @@ export default function GraphPage() {
           <div style={{ position: "absolute", right: 24, top: 24 }}>
             <FilterPanel professionOptions={professionOptions} tagOptions={tagOptions} value={filters} onChange={setFilters} />
           </div>
+        )}
+
+        {!loading && matchedContacts.length >= 2 && (
+          <button
+            type="button"
+            onClick={() => setIntroducing(true)}
+            className="tl-btn-primary"
+            style={{
+              position: "absolute",
+              left: 24,
+              top: 24,
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              height: 38,
+              padding: "0 16px",
+              background: "var(--accent)",
+              border: "none",
+              borderRadius: "var(--radius-md)",
+              color: "var(--accent-contrast)",
+              fontSize: 13,
+              fontWeight: 600,
+              boxShadow: "var(--shadow-md)",
+            }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+            Introduce
+          </button>
+        )}
+
+        {introducing && (
+          <IntroduceModal matchedContacts={matchedContacts} onClose={() => setIntroducing(false)} onIntroduced={() => {}} />
         )}
 
         {!loading && hasGraphNodes && (

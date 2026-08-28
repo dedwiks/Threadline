@@ -11,6 +11,7 @@ import ContactDetailPage from "./pages/ContactDetailPage";
 import GraphPage from "./pages/GraphPage";
 import MapPage from "./pages/MapPage";
 import SettingsPage from "./pages/SettingsPage";
+import ConnectionsPage from "./pages/ConnectionsPage";
 
 function Root() {
   const { status, user } = useAuth();
@@ -78,6 +79,14 @@ function App() {
         element={
           <RequireAuth>
             <MapPage />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/connections"
+        element={
+          <RequireAuth>
+            <ConnectionsPage />
           </RequireAuth>
         }
       />
